@@ -179,7 +179,11 @@ def _(pl, this_dir):
         """,
         uri=f"sqlite:::{sakila_data}",
     )
+    return
 
+
+@app.cell
+def _():
     return
 
 
