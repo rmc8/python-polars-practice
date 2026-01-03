@@ -8,6 +8,7 @@ app = marimo.App(width="medium")
 def _():
     import time
     from pathlib import Path
+
     import marimo as mo
     import polars as pl
 
@@ -21,12 +22,13 @@ def _(time):
     def run_time(fx):
         def inner(*args, **kwargs):
             start = time.time()
-            ret =  fx(*args, **kwargs)
+            ret = fx(*args, **kwargs)
             duration = time.time() - start
             print(f"Time: {duration}")
             return ret
 
         return inner
+
     return (run_time,)
 
 
@@ -35,13 +37,18 @@ def _(data_path, pl, run_time):
     @run_time
     def _():
         trips = pl.read_parquet(data_path)
-        sum_per_vendor = trips.select("VendorID", "total_amount", "trip_distance").group_by("VendorID").sum()
+        sum_per_vendor = (
+            trips.select("VendorID", "total_amount", "trip_distance")
+            .group_by("VendorID")
+            .sum()
+        )
         income_per_distance_per_vendor = sum_per_vendor.select(
             "VendorID",
             income_per_distance=pl.col("total_amount") / pl.col("trip_distance"),
         )
         top_three = income_per_distance_per_vendor.sort(
-            by="income_per_distance", descending=True,
+            by="income_per_distance",
+            descending=True,
         ).head(3)
         print(top_three)
 
@@ -54,13 +61,18 @@ def _(data_path, pl, run_time):
     @run_time
     def _():
         trips = pl.scan_parquet(data_path)
-        sum_per_vendor = trips.select("VendorID", "total_amount", "trip_distance").group_by("VendorID").sum()
+        sum_per_vendor = (
+            trips.select("VendorID", "total_amount", "trip_distance")
+            .group_by("VendorID")
+            .sum()
+        )
         income_per_distance_per_vendor = sum_per_vendor.select(
             "VendorID",
-            income_per_distance=pl.col("total_amount") /pl.col("trip_distance"),
+            income_per_distance=pl.col("total_amount") / pl.col("trip_distance"),
         )
         top_three = income_per_distance_per_vendor.sort(
-            by="income_per_distance", descending=True,
+            by="income_per_distance",
+            descending=True,
         ).head(3)
         print(top_three.collect())
 

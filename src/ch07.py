@@ -7,11 +7,12 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     from pathlib import Path
+
     import marimo as mo
     import polars as pl
 
     this_dir = Path(__file__).parent
-    fruit_data = this_dir / "data"  / "fruit.csv"
+    fruit_data = this_dir / "data" / "fruit.csv"
     return fruit_data, pl
 
 
@@ -33,7 +34,7 @@ app._unparsable_cell(
         )
     
     """,
-    name="_"
+    name="_",
 )
 
 
@@ -49,18 +50,13 @@ def _(fruit, pl):
 
 @app.cell
 def _(fruit, pl):
-    fruit.filter(
-        (pl.col("weight") > 1000)
-        & pl.col("is_round")
-    )
+    fruit.filter((pl.col("weight") > 1000) & pl.col("is_round"))
     return
 
 
 @app.cell
 def _(fruit, pl):
-    fruit.group_by(
-        pl.col("origin").str.split(" ").list.last()
-    ).agg(
+    fruit.group_by(pl.col("origin").str.split(" ").list.last()).agg(
         average_weight=pl.col("weight").mean()
     )
     return
@@ -108,11 +104,9 @@ def _(fruit, pl):
 @app.cell
 def _(pl):
     pl.select(
-        start=pl.int_range(0,5),
-        end=pl.arange(0,10,2).pow(2),
-    ).with_columns(
-        int_range=pl.int_ranges("start", "end")
-    ).with_columns(
+        start=pl.int_range(0, 5),
+        end=pl.arange(0, 10, 2).pow(2),
+    ).with_columns(int_range=pl.int_ranges("start", "end")).with_columns(
         range_length=pl.col("int_range").list.len()
     )
     return
@@ -143,9 +137,7 @@ def _(df, pl):
 
 @app.cell
 def _(df, pl):
-    df.select(
-        pl.all().name.map(lambda s: s.lower().replace(" ", "_"))
-    )
+    df.select(pl.all().name.map(lambda s: s.lower().replace(" ", "_")))
     return
 
 

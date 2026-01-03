@@ -7,6 +7,7 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     from pathlib import Path
+
     import marimo as mo
     import polars as pl
 

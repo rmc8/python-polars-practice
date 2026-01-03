@@ -10,26 +10,15 @@ def _():
     import zipfile
     from pathlib import Path
 
-    import pyarrow
     import httpx
     import marimo as mo
     import polars as pl
-    from plotnine import (
-        ggplot,
-        geom_polygon,
-        geom_point,
-        scale_x_continuous,
-        scale_y_continuous,
-        scale_alpha_ordinal,
-        scale_fill_brewer,
-        guides,
-        labs,
-        aes,
-        element_rect,
-        element_text,
-        theme_void,
-        theme,
-    )
+    import pyarrow
+    from plotnine import (aes, element_rect, element_text, geom_point,
+                          geom_polygon, ggplot, guides, labs,
+                          scale_alpha_ordinal, scale_fill_brewer,
+                          scale_x_continuous, scale_y_continuous, theme,
+                          theme_void)
 
     this_dir = Path(__file__).parent
     return (
@@ -185,8 +174,8 @@ def _(
         ggplot(neighborhoods_coords, aes(x="lon", y="lat", group="id"))
         + geom_polygon(aes(alpha="neighborhood", fill="borough"), color="white")
         + geom_point(stations, size=0.1)
-        + scale_x_continuous(expand=(0,0))
-        + scale_y_continuous(expand=(0,0,0,0.01))
+        + scale_x_continuous(expand=(0, 0))
+        + scale_y_continuous(expand=(0, 0, 0, 0.01))
         + scale_alpha_ordinal(range=(0.3, 1))
         + scale_fill_brewer(type="qual", palette=2)
         + guides(alpha=False)
@@ -199,7 +188,7 @@ def _(
         + theme_void(base_family="Arial", base_size=14)
         + theme(
             dpi=300,
-            figure_size=(7,9),
+            figure_size=(7, 9),
             plot_background=element_rect(fill="white", color="white"),
             plot_caption=element_text(style="italic"),
             plot_margin=0.01,
@@ -226,9 +215,7 @@ def _(pl, trips):
         lat_start=pl.col("start_lat"),
         lon_end=pl.col("end_lng"),
         lat_end=pl.col("end_lat"),
-    ).with_columns(
-        duration=(pl.col("datetime_end") - pl.col("datetime_start"))
-    )
+    ).with_columns(duration=(pl.col("datetime_end") - pl.col("datetime_start")))
     trips2.columns
     return (trips2,)
 

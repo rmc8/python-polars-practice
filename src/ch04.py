@@ -7,11 +7,12 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     from pathlib import Path
+
     import marimo as mo
     import polars as pl
 
     this_dir = Path(__file__).parent
-    fruit_data  = this_dir / "data" / "fruit.csv"
+    fruit_data = this_dir / "data" / "fruit.csv"
     return fruit_data, pl
 
 
@@ -25,23 +26,14 @@ def _(pl):
 
 @app.cell
 def _(pl, sales_series):
-    sales_df = pl.DataFrame(
-        {
-            "sales": sales_series,
-            "customer_id": [24, 25, 26]
-        }
-
-    )
+    sales_df = pl.DataFrame({"sales": sales_series, "customer_id": [24, 25, 26]})
     sales_df
     return
 
 
 @app.cell
 def _(fruit_data, pl):
-
-    lazy_df = pl.scan_csv(fruit_data).with_columns(
-        is_heavy=pl.col("weight") > 200
-    )
+    lazy_df = pl.scan_csv(fruit_data).with_columns(is_heavy=pl.col("weight") > 200)
     lazy_df.show_graph()
     return
 
@@ -50,8 +42,8 @@ def _(fruit_data, pl):
 def _(pl):
     coordinates = pl.DataFrame(
         [
-            pl.Series("point_2d", [[1,3], [2,5]]),
-            pl.Series("point_3d", [[1,7,3], [8,1,0]]),
+            pl.Series("point_2d", [[1, 3], [2, 5]]),
+            pl.Series("point_3d", [[1, 7, 3], [8, 1, 0]]),
         ],
         schema={
             "piont_2d": pl.Array(shape=2, inner=pl.Int64),
@@ -67,7 +59,7 @@ def _(pl):
     weather_readings = pl.DataFrame(
         {
             "temperature": [[72.5, 75.0, 77.3], [68.0, 70.2]],
-            "wind_speed": [[15,20], [10,12,14,16]],
+            "wind_speed": [[15, 20], [10, 12, 14, 16]],
         }
     )
     weather_readings
@@ -81,7 +73,7 @@ def _(pl):
         [
             {"Movie": "Cars", "Theatre": "NE", "Avg_Rating": 4.5},
             {"Movie": "Toy Story", "Theatre": "ME", "Avg_Rating": 4.9},
-        ]
+        ],
     )
     rating_series
     return
@@ -91,7 +83,7 @@ def _(pl):
 def _(pl):
     missing_df = pl.DataFrame(
         {
-            "value": [None, 2, 3,4,None,None,7,8,9,None],
+            "value": [None, 2, 3, 4, None, None, 7, 8, 9, None],
         }
     )
     missing_df

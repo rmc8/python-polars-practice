@@ -9,7 +9,7 @@ def _():
     import math
     from pathlib import Path
 
-    import numpy as np 
+    import numpy as np
     import polars as pl
 
     this_dir = Path(__file__).parent
@@ -84,16 +84,14 @@ def _(math, pl):
 @app.cell
 def _(math, pl):
     (
-        pl.DataFrame(
-            {"x": [-2.0, 0.0, 0.5, 1.0, math.e, 1000.0]}
-        ).with_columns(
-           cum_count=pl.col("x").cum_count(),
-           cum_max=pl.col("x").cum_max(),
-           cum_min=pl.col("x").cum_min(),
-           cum_prod=pl.col("x").cum_prod(reverse=True),
-           cum_sum=pl.col("x").cum_sum(),
-           diff=pl.col("x").diff(),
-           pct_change=pl.col("x").pct_change(),
+        pl.DataFrame({"x": [-2.0, 0.0, 0.5, 1.0, math.e, 1000.0]}).with_columns(
+            cum_count=pl.col("x").cum_count(),
+            cum_max=pl.col("x").cum_max(),
+            cum_min=pl.col("x").cum_min(),
+            cum_prod=pl.col("x").cum_prod(reverse=True),
+            cum_sum=pl.col("x").cum_sum(),
+            diff=pl.col("x").diff(),
+            pct_change=pl.col("x").pct_change(),
         )
     )
     return
@@ -119,9 +117,7 @@ def _(math, pl):
 @app.cell
 def _(pl):
     (
-        pl.DataFrame(
-            {"x": ["A", "C", "D", "C"]}
-        ).with_columns(
+        pl.DataFrame({"x": ["A", "C", "D", "C"]}).with_columns(
             is_duplicated=pl.col("x").is_duplicated(),
             is_first_distinct=pl.col("x").is_first_distinct(),
             is_last_distinct=pl.col("x").is_last_distinct(),
@@ -133,24 +129,21 @@ def _(pl):
 
 @app.cell
 def _(pl, this_dir):
-    from plotnine import ggplot, aes, geom_line, labs, theme_tufte, theme
+    from plotnine import aes, geom_line, ggplot, labs, theme, theme_tufte
 
     stock_data = this_dir / "data" / "stock" / "nvda" / "2023.csv"
-    stock = pl.read_csv(
-        stock_data, try_parse_dates=True
-        ).select(
-            "date", "close"
-        ).with_columns(
+    stock = (
+        pl.read_csv(stock_data, try_parse_dates=True)
+        .select("date", "close")
+        .with_columns(
             ewm_mean=pl.col("close").ewm_mean(com=7, ignore_nulls=True),
             rolling_mean=pl.col("close").rolling_mean(window_size=7),
             rolling_min=pl.col("close").rolling_min(window_size=7),
         )
+    )
 
     p = (
-        ggplot(
-            stock.unpivot(index="date"),
-            aes("date", "value", color="variable")
-        )
+        ggplot(stock.unpivot(index="date"), aes("date", "value", color="variable"))
         + geom_line(size=1)
         + labs(x="Date", y="Value", color="Method")
         + theme_tufte(base_family="Arial", base_size=14)
@@ -165,7 +158,7 @@ def _(pl):
     (
         pl.DataFrame(
             {
-                "x": [1,3,None,3,7],
+                "x": [1, 3, None, 3, 7],
                 "y": ["D", "I", "S", "C", "0"],
             }
         ).with_columns(
@@ -184,9 +177,7 @@ def _(pl):
 @app.cell
 def _(pl):
     (
-        pl.DataFrame(
-            {"x": [33, 33, 27, 33, 60,60,60,33,60]}
-        ).with_columns(
+        pl.DataFrame({"x": [33, 33, 27, 33, 60, 60, 60, 33, 60]}).with_columns(
             rle_id=pl.col("x").rle_id(),
         )
     )
@@ -197,9 +188,9 @@ def _(pl):
 def _(pl):
     df = pl.DataFrame(
         {
-            "x":[1,0,1],
-            "y":[1,1,1],
-            "z":[0,0,0],
+            "x": [1, 0, 1],
+            "y": [1, 1, 1],
+            "z": [0, 0, 0],
         }
     )
     print(df)
@@ -216,9 +207,7 @@ def _(pl):
 def _(pl, rng):
     samples = rng.normal(loc=5, scale=3, size=1_000_000)
     (
-        pl.DataFrame(
-            {"x": samples}
-        ).select(
+        pl.DataFrame({"x": samples}).select(
             max=pl.col("x").max(),
             min=pl.col("x").min(),
             mean=pl.col("x").mean(),
@@ -242,9 +231,7 @@ def _(mo):
 
 @app.cell
 def _(pl, rng):
-    samples2 = pl.Series(
-        rng.integers(low=0, high=10_000, size=1_729)
-    )
+    samples2 = pl.Series(rng.integers(low=0, high=10_000, size=1_729))
     samples2[403] = None
     df_ints = pl.DataFrame({"x": samples2}).with_row_index()
     df_ints.slice(400, 6)
@@ -258,7 +245,7 @@ def _(df_ints, pl):
         head=pl.col("x").head(7),
         sample=pl.col("x").sample(7),
         slice=pl.col("x").slice(400, 7),
-        gather=pl.col("x").gather([1,1,2,3,5,8,13]),
+        gather=pl.col("x").gather([1, 1, 2, 3, 5, 8, 13]),
         gather_every=pl.col("x").gather_every(247),
         top_k=pl.col("x").top_k(7),
     )
@@ -267,7 +254,7 @@ def _(df_ints, pl):
 
 @app.cell
 def _(np, pl):
-    x=[None, 1.0, 2.0, 3.0, np.nan]
+    x = [None, 1.0, 2.0, 3.0, np.nan]
     (
         pl.DataFrame({"x": x}).select(
             drop_nans=pl.col("x").drop_nans(),
@@ -279,11 +266,9 @@ def _(np, pl):
 
 @app.cell
 def _(pl):
-    numbers=[33,33,27,33,60,60,60,33,60]
+    numbers = [33, 33, 27, 33, 60, 60, 60, 33, 60]
     (
-        pl.DataFrame(
-            {"x":numbers}
-        ).select(
+        pl.DataFrame({"x": numbers}).select(
             arg_true=(pl.col("x") >= 60).arg_true(),
         )
     )
@@ -293,9 +278,7 @@ def _(pl):
 @app.cell
 def _(numbers, pl):
     (
-        pl.DataFrame(
-            {"x": numbers}
-        ).select(
+        pl.DataFrame({"x": numbers}).select(
             mode=pl.col("x").mode().sort(),
         )
     )
@@ -305,9 +288,7 @@ def _(numbers, pl):
 @app.cell
 def _(numbers, pl):
     (
-        pl.DataFrame(
-            {"x": numbers}
-        ).select(
+        pl.DataFrame({"x": numbers}).select(
             mode=pl.col("x").mode().sort(),
         )
     )
@@ -316,22 +297,14 @@ def _(numbers, pl):
 
 @app.cell
 def _(numbers, pl):
-    (
-        pl.DataFrame(
-            {"x": numbers}
-        ).select(
-            reshape=pl.col("x").reshape((3,3))
-        )
-    )
+    (pl.DataFrame({"x": numbers}).select(reshape=pl.col("x").reshape((3, 3))))
     return
 
 
 @app.cell
 def _(numbers, pl):
     (
-        pl.DataFrame(
-            {"x": numbers}
-        ).select(
+        pl.DataFrame({"x": numbers}).select(
             rle=pl.col("x").rle(),
         )
     )
@@ -341,9 +314,7 @@ def _(numbers, pl):
 @app.cell
 def _(numbers, pl):
     (
-        pl.DataFrame(
-            {"x": numbers}
-        ).select(
+        pl.DataFrame({"x": numbers}).select(
             rle=pl.col("x").sort().search_sorted(42),
         )
     )
@@ -353,11 +324,7 @@ def _(numbers, pl):
 @app.cell
 def _(pl):
     (
-        pl.DataFrame(
-            {
-                "x": [["a", "b"], ["c", "d"]]
-            }
-        ).select(
+        pl.DataFrame({"x": [["a", "b"], ["c", "d"]]}).select(
             explode=pl.col("x").explode(),
         )
     )
