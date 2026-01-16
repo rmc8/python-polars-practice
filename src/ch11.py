@@ -74,7 +74,7 @@ def _(pl, tools):
 @app.cell
 def _(pl):
     lists = pl.DataFrame(
-        {"lists": [[2,2], [2,1,3], [1]]},
+        {"lists": [[2, 2], [2, 1, 3], [1]]},
     )
     lists.sort("lists")
     return
@@ -85,8 +85,8 @@ def _(pl):
     strucsts = pl.DataFrame(
         {
             "strucsts": [
-                {"a": 1, "b": 2, "c":3},
-                {"a": 1, "b": 3, "c":1},
+                {"a": 1, "b": 2, "c": 3},
+                {"a": 1, "b": 3, "c": 1},
                 {"a": 1, "b": 1, "c": 2},
             ]
         }
@@ -111,10 +111,7 @@ def _(pl, tools_collection):
 @app.cell
 def _(pl, tools_collection):
     tools_collection.sort(
-        pl.col("collection")
-        .list.eval(
-            pl.element().struct.field("price")
-                  ).list.mean()
+        pl.col("collection").list.eval(pl.element().struct.field("price")).list.mean()
     )
     return
 

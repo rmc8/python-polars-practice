@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "httpx>=0.28.1",
-    "marimo>=0.18.4",
+    "marimo>=0.19.0",
     "pandas>=2.3.3",
     "polars[all]>=1.36.1",
     "polars-ds>=0.10.3",
