@@ -174,10 +174,10 @@ def _(pl):
         {
             "customer_id": [2781, 6139, 5392],
             "order_details": [
-                {"amount": 250.00, "date": date(2024, 1, 3), "items":5},
+                {"amount": 250.00, "date": date(2024, 1, 3), "items": 5},
                 {"amount": 150.00, "date": date(2024, 1, 5), "items": 1},
                 {"amount": 100.00, "date": date(2024, 1, 2), "items": 3},
-            ]
+            ],
         }
     )
     orders

@@ -14,22 +14,11 @@ def _():
     import marimo as mo
     import polars as pl
     import pyarrow
-    from plotnine import (
-        aes,
-        element_rect,
-        element_text,
-        geom_point,
-        geom_polygon,
-        ggplot,
-        guides,
-        labs,
-        scale_alpha_ordinal,
-        scale_fill_brewer,
-        scale_x_continuous,
-        scale_y_continuous,
-        theme,
-        theme_void,
-    )
+    from plotnine import (aes, element_rect, element_text, geom_point,
+                          geom_polygon, ggplot, guides, labs,
+                          scale_alpha_ordinal, scale_fill_brewer,
+                          scale_x_continuous, scale_y_continuous, theme,
+                          theme_void)
 
     this_dir = Path(__file__).parent
     return (
